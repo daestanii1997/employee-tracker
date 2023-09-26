@@ -33,17 +33,8 @@ const userSelection = () => {
     ]) .then((answers) => {
 
         // View all Employees
-
         if (answers.choices === 'View all employees'){
-
-            console.log('You are viewing all employees')
-
-            db.query('SELECT employee.employee_id, employee.first_name, employee.last_name, role.title, role.salary, department.name AS department, employee.manager_id FROM employee LEFT JOIN role ON employee.role_id = role.role_id LEFT JOIN department ON role.department_id=department.department_id;', function (err, results) {
-                
-                console.table(results);
-            })
-
-            userSelection();
+            viewEmployees();
         } 
 
         // Add employees
@@ -52,8 +43,6 @@ const userSelection = () => {
 
             console.log('Add employee');
 
-            userSelection();
-            
         }
 
         // Update employee role
@@ -62,22 +51,11 @@ const userSelection = () => {
 
             console.log('Update employee role');
 
-            userSelection();
-            
         }
 
         // View all roles
-
         else if (answers.choices === 'View all roles'){
-
-            console.log('You are viewing all roles')
-
-            db.query('SELECT role.role_id, role.title, department.name AS department, role.salary FROM role INNER JOIN department ON role.department_id = department.department_id;', function (err, results) {
-                console.table(results);
-            })
-
-            userSelection();
-
+            viewRoles();
         }
 
         // Add role
@@ -86,22 +64,12 @@ const userSelection = () => {
 
             console.log('Add role');
             
-            userSelection();
 
         }
 
         // View all employees
-
         else if (answers.choices === 'View all departments'){
-
-            console.log('You are viewing all departments')
-
-            db.query('SELECT * FROM department', function (err, results) {
-                console.table(results);
-                console.log(results);
-            })
-
-            userSelection();
+            viewDepartments();
         }
 
         // Add department
@@ -110,7 +78,6 @@ const userSelection = () => {
 
             console.log('Add department');
 
-            userSelection();
             
         }
 
@@ -122,7 +89,52 @@ const userSelection = () => {
 
             console.log('Quit')
         }
+        console.clear();
+        userSelection();
     })
 }
 
 userSelection();
+
+viewEmployees = () => {
+    console.log('You are viewing all employees..\n')
+
+    const query = `SELECT employee.employee_id, employee.first_name, employee.last_name, role.title, role.salary, department.name AS department, employee.manager_id FROM employee LEFT JOIN role ON employee.role_id = role.role_id LEFT JOIN department ON role.department_id=department.department_id;`
+
+            db.query(query, function (err, results) {
+                
+                console.table(results);
+            });
+};
+
+addEmployee = () => {
+    console.log('You are adding a employee..\n');
+};
+
+viewRoles = () => {
+    console.log('You are viewing all roles..\n')
+
+    const query = `SELECT role.role_id, role.title, department.name AS department, role.salary FROM role INNER JOIN department ON role.department_id = department.department_id;`
+
+    db.query(query, function (err, results) {
+        console.table(results);
+    })
+};
+
+addRole = () => {
+    console.log('You are adding a role..\n');
+}
+
+viewDepartments = () => {
+    console.log('You are viewing all departments..\n')
+
+    const query = `SELECT * FROM department`
+
+    db.query(query, function (err, results) {
+        console.table(results);
+    })
+};
+
+addDepartment = () => {
+    console.log('You are adding a department..\n');
+};
